@@ -1,0 +1,65 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	id 'maven-publish'
+}
+
+repositories {
+	// 国产镜像放在前面，加速第三方依赖下载
+	maven {
+		name = 'Aliyun'
+		url = 'https://maven.aliyun.com/repository/public'
+	}
+	maven {
+		name = 'Tencent'
+		url = 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/'
+	}
+	mavenCentral()
+}
+
+loom {
+	// 把客户端代码拆到独立的 src/client 源集，避免服务端误引入渲染类
+	splitEnvironmentSourceSets()
+
+	mods {
+		"starbeast" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+	// 使用 Mojang 官方映射，类名方法名和官方 Wiki 一致
+	mappings loom.officialMojangMappings()
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+java {
+	withSourcesJar()
+
+	// 工具链固定用 JDK 17 编译并运行游戏（Minecraft 1.20.4 的要求）。
+	// Gradle 自己跑在 25 上（Loom 1.19 需要 JVM 25+），但产出字节码和游戏进程都是 17。
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}

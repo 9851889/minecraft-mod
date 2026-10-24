@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "starbeast",
+	"version": "${version}",
+	"name": "星辉兽",
+	"description": "一个自定义生物模组：加入星辉兽——一种会发光的温顺四足生物。",
+	"authors": [
+		"9851889"
+	],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.example.starbeast.StarBeastMod"
+		],
+		"client": [
+			"com.example.starbeast.client.StarBeastClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

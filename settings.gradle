@@ -1,0 +1,23 @@
+pluginManagement {
+	repositories {
+		// Fabric 自己的仓库（Loom 插件、Fabric API 都在这）
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		// 国产镜像，下载快很多；找不到的构件会自动往下顺延
+		maven {
+			name = 'Aliyun'
+			url = 'https://maven.aliyun.com/repository/public'
+		}
+		maven {
+			name = 'Tencent'
+			url = 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+// 必须和 fabric.mod.json 里的 "id" 一致
+rootProject.name = 'starbeast'
